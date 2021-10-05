@@ -11,13 +11,13 @@ const apiKey = environment.apiKey;
 })
 export class MoviesService {
 
+  private popularesPage: number = 0; 
+
   constructor( private _httpClientModule: HttpClient ) { }
 
   private ejecutarQuery<T>(query: string){
     query = URL + query;
     query += `&api_key=${ apiKey }&language=es&include_image_language=es`;
-    console.log("Hola", query);
-    
     return this._httpClientModule.get<T>( query );
   }
 
@@ -42,7 +42,8 @@ export class MoviesService {
   }
 
   getPopular(){
-    const query = '/discover/movie?sort_by=popularity.desc';
+    this.popularesPage++;
+    const query = `/discover/movie?sort_by=popularity.desc&page=${this.popularesPage}`;
     return this.ejecutarQuery<RespuestaMDB>(query);
   }
 }

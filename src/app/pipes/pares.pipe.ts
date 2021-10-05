@@ -11,8 +11,6 @@ export class ParesPipe implements PipeTransform {
       }
       return result;
     }, []);
-    console.log(pares);
-
     return pares;
   }
 }

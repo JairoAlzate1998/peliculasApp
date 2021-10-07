@@ -12,12 +12,28 @@ export class Tab3Page implements OnInit {
 
   peliculas: PeliculaDetalle[] = [];
   generos: Genre[] = [];
+  favoritoGenero: any[] = [];
 
   constructor( private dataLocal: DataLocalService, private movieService: MoviesService ) {}
 
-  async ngOnInit(){
-    this.peliculas = await this.dataLocal.cargarFavoritos();
-    this.generos = await this.movieService.cargarGeneros();
+  ngOnInit(){
   }
 
+  async ionViewWillEnter(){
+    this.peliculas = await this.dataLocal.cargarFavoritos();
+    this.generos = await this.movieService.cargarGeneros();
+    this.pelisPorGenero(this.generos, this.peliculas);
+  }
+
+  pelisPorGenero( generos: Genre[], peliculas: PeliculaDetalle[] ){
+    this.favoritoGenero = [];
+    generos.forEach(genero => {
+      this.favoritoGenero.push({
+        genero: genero.name,
+        pelis: this.peliculas.filter(peli => {
+          return peli.genres.find( genre => genre.id === genero.id);
+        })
+      })
+    });
+  }
 }
